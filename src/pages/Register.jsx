@@ -1,8 +1,36 @@
-import React from "react";
+import React, { use } from "react";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { Link } from "react-router";
+import { AuthContext } from "../context/AuthContext";
+
+
 
 const Register = () => {
+
+  const {createUser} = use(AuthContext)
+
+  const handleSubmit = (e) => {
+  e.preventDefault();    
+  const form = e.target;
+  const name = form.fullName.value;
+  const email = form.email.value;
+  const phone = form.phone.value;
+  const password= form.password.value;
+
+  console.log(name, email, phone, password);
+
+  // create user
+
+  createUser(email, password)
+  .then(result => {
+    console.log(result.user);
+  })
+  .catch(error => {
+    console.log(error);
+  })
+}
+
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-green-50 flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-5xl bg-white rounded-3xl shadow-2xl overflow-hidden grid lg:grid-cols-2">
@@ -11,14 +39,14 @@ const Register = () => {
         <div className="hidden lg:flex flex-col items-center justify-center bg-gradient-to-br from-green-500 to-emerald-600 p-10">
 
           {/* Lottie Animation */}
-         <div className="w-80 h-80">
-  <Player
-    autoplay
-    loop
-    src="https://assets2.lottiefiles.com/packages/lf20_hy4txm7l.json"
-    style={{ height: "100%", width: "100%" }}
-  />
-</div>
+          <div className="w-80 h-80">
+            <Player
+              autoplay
+              loop
+              src="https://assets2.lottiefiles.com/packages/lf20_hy4txm7l.json"
+              style={{ height: "100%", width: "100%" }}
+            />
+          </div>
 
           {/* Heading */}
           <h2 className="text-white text-3xl font-bold mt-6 text-center">
@@ -47,7 +75,7 @@ const Register = () => {
         </div>
 
         {/* ========== RIGHT - Form ========== */}
-        <div className="p-8 sm:p-10 lg:p-12">
+        <form onSubmit={handleSubmit} className="p-8 sm:p-10 lg:p-12">
 
           {/* Logo */}
           <Link to="/" className="text-2xl font-bold text-slate-800">
@@ -70,22 +98,34 @@ const Register = () => {
 
           {/* Role Selection */}
           <div className="mt-6 flex gap-3">
-            <button
-              type="button"
-              className="flex-1 py-2.5 rounded-xl text-sm font-medium border-2 border-green-500 bg-green-50 text-green-600 shadow-sm transition-all duration-300"
-            >
-              🔍 Job Seeker
-            </button>
-            <button
-              type="button"
-              className="flex-1 py-2.5 rounded-xl text-sm font-medium border-2 border-slate-200 text-slate-500 hover:border-slate-300 transition-all duration-300"
-            >
-              🏢 Employer
-            </button>
+            <label className="flex-1 cursor-pointer">
+              <input
+                type="radio"
+                name="role"
+                value="jobseeker"
+                defaultChecked
+                className="peer hidden"
+              />
+              <div className="py-2.5 text-center rounded-xl text-sm font-medium border-2 border-slate-200 text-slate-500 peer-checked:border-green-500 peer-checked:bg-green-50 peer-checked:text-green-600 peer-checked:shadow-sm transition-all duration-300">
+                🔍 Job Seeker
+              </div>
+            </label>
+
+            <label className="flex-1 cursor-pointer">
+              <input
+                type="radio"
+                name="role"
+                value="employer"
+                className="peer hidden"
+              />
+              <div className="py-2.5 text-center rounded-xl text-sm font-medium border-2 border-slate-200 text-slate-500 peer-checked:border-green-500 peer-checked:bg-green-50 peer-checked:text-green-600 peer-checked:shadow-sm transition-all duration-300">
+                🏢 Employer
+              </div>
+            </label>
           </div>
 
-          {/* Form */}
-          <form className="mt-6 space-y-4">
+          {/* Inputs */}
+          <div className="mt-6 space-y-4">
 
             {/* Full Name */}
             <div>
@@ -109,8 +149,10 @@ const Register = () => {
                 </span>
                 <input
                   type="text"
+                  name="fullName"
                   placeholder="e.g. Rahim Uddin"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+                  required
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 text-black focus:border-transparent transition"
                 />
               </div>
             </div>
@@ -134,8 +176,10 @@ const Register = () => {
                 </span>
                 <input
                   type="email"
+                  name="email"
                   placeholder="you@example.com"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+                  required
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-green-500  text-black focus:border-transparent transition"
                 />
               </div>
             </div>
@@ -158,8 +202,10 @@ const Register = () => {
                 </span>
                 <input
                   type="tel"
+                  name="phone"
                   placeholder="+880 1XXX-XXXXXX"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+                  required
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition text-black"
                 />
               </div>
             </div>
@@ -186,62 +232,23 @@ const Register = () => {
                 </span>
                 <input
                   type="password"
+                  name="password"
                   placeholder="Min 8 characters"
-                  className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+                  required
+                  minLength={8}
+                  className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 text-black focus:border-transparent transition"
                 />
-                <button
-                  type="button"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                    <path
-                      fillRule="evenodd"
-                      d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
               </div>
             </div>
 
-            {/* Confirm Password */}
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
-                Confirm Password
-              </label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </span>
-                <input
-                  type="password"
-                  placeholder="Re-enter password"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
-                />
-              </div>
-            </div>
+       
 
             {/* Terms */}
             <div className="flex items-start gap-2">
               <input
                 type="checkbox"
+                name="agreeTerms"
+                required
                 className="mt-1 h-4 w-4 rounded border-slate-300 text-green-500 focus:ring-green-500"
               />
               <label className="text-sm text-slate-500">
@@ -269,7 +276,7 @@ const Register = () => {
             >
               Create Account
             </button>
-          </form>
+          </div>
 
           {/* Divider */}
           <div className="flex items-center gap-4 my-6">
@@ -331,7 +338,7 @@ const Register = () => {
               LinkedIn
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

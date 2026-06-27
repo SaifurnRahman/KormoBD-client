@@ -1,8 +1,20 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { Link } from "react-router";
+import { AuthContext } from "../context/AuthContext";
+import button from "daisyui/components/button";
+import { signOut } from "firebase/auth";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const {user, signOutUser} = use(AuthContext)
+
+  const handleSignOut = (e) => {
+    signOutUser()
+    .then(() => {
+      console.log('signed out user');
+    })
+
+  }
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -41,7 +53,17 @@ const Navbar = () => {
 
           {/* Desktop Buttons */}
           <div className="hidden md:flex items-center gap-3">
-            <Link
+
+            <div>
+              {
+                user ? <Link onClick={handleSignOut}
+            
+              className="text-sm font-medium border border-slate-300 px-4 py-2 rounded-lg hover:border-black-500 hover:text-black transition bg-red-500 text-white"
+            >
+              Log Out
+            </Link> :
+                <>
+                <Link
               to="/login"
               className="text-sm font-medium text-slate-700 border border-slate-300 px-4 py-2 rounded-lg hover:border-green-500 hover:text-green-500 transition"
             >
@@ -53,6 +75,9 @@ const Navbar = () => {
             >
               Register
             </Link>
+                </>
+              }
+            </div>
             <Link
               to="/post-job"
               className="text-sm font-medium text-white bg-slate-800 px-4 py-2 rounded-lg hover:bg-slate-700 transition"
