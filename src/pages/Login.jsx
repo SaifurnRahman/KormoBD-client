@@ -16,7 +16,7 @@ import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
 
-    const {signInUser, }= use(AuthContext)
+    const {signInUser,signInWithGoogle }= use(AuthContext)
 
 const handleLogin = (e) => {
     e.preventDefault();    
@@ -34,6 +34,16 @@ const handleLogin = (e) => {
         console.log(err);
     })
 
+}
+
+const handleGoogleSignIn = () => {
+    signInWithGoogle()
+    .then(result => {
+        console.log(result.user);
+    })
+    .catch(error => {
+        console.log(error);
+    })
 }
 
   return (
@@ -223,7 +233,7 @@ const handleLogin = (e) => {
           <div className="flex gap-3">
 
             {/* Google */}
-            <button
+            <button onClick={handleGoogleSignIn}
               type="button"
               className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition"
             >

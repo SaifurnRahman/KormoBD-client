@@ -7,7 +7,7 @@ import { AuthContext } from "../context/AuthContext";
 
 const Register = () => {
 
-  const {createUser} = use(AuthContext)
+  const {createUser} = use(AuthContext);
 
   const handleSubmit = (e) => {
   e.preventDefault();    

@@ -43,7 +43,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-slate-50 via-white to-green-50 overflow-hidden">
+    <section className="relative  bg-gradient-to-br from-slate-50 via-white to-green-50 overflow-hidden">
 
       {/* Background Decorations */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-green-200 rounded-full blur-3xl opacity-30 -translate-y-1/2 translate-x-1/2" />
@@ -221,8 +221,8 @@ const Hero = () => {
 
               {/* Main Image */}
               <motion.div
-                whileHover={{ rotate: -2 }}
-                transition={{ duration: 0.3 }}
+                animate={{ rotate: [0, -2, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
                 className="relative w-full h-[500px] bg-white rounded-3xl shadow-2xl overflow-hidden border-8 border-white"
               >
                 <img
