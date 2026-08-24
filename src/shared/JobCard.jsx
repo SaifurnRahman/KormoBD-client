@@ -167,7 +167,7 @@ const JobCard = ({job}) => {
                       whileTap={{ scale: 0.95 }}
                       className="px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-lg hover:bg-green-600 transition flex items-center gap-1"
                     >
-                      Apply
+                      Show Details
                       <HiArrowRight className="w-3.5 h-3.5" />
                     </motion.button>
                   </Link>
