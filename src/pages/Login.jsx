@@ -1,6 +1,6 @@
 import React, { use } from "react";
 import { Player } from "@lottiefiles/react-lottie-player";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import {
   HiOutlineMail,
   HiOutlineLockClosed,
@@ -16,7 +16,10 @@ import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
 
-    const {signInUser,signInWithGoogle }= use(AuthContext)
+const {signInUser,signInWithGoogle }= use(AuthContext)
+const location = useLocation();
+const navigate = useNavigate();
+const from = location.state || '/';
 
 const handleLogin = (e) => {
     e.preventDefault();    
@@ -29,6 +32,7 @@ const handleLogin = (e) => {
     signInUser(email, password)
     .then(result => {
         console.log(result.user);
+        navigate(from)
     })
     .catch(err => {
         console.log(err);
@@ -40,6 +44,7 @@ const handleGoogleSignIn = () => {
     signInWithGoogle()
     .then(result => {
         console.log(result.user);
+        navigate(from)
     })
     .catch(error => {
         console.log(error);
