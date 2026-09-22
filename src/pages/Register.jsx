@@ -7,7 +7,7 @@ import { AuthContext } from "../context/AuthContext";
 
 const Register = () => {
 
-  const {createUser} = use(AuthContext);
+  const {createUser, updateUserProfile} = use(AuthContext);
 
   const handleSubmit = (e) => {
   e.preventDefault();    
@@ -20,15 +20,21 @@ const Register = () => {
   console.log(name, email, phone, password);
 
   // create user
+    createUser(email, password)
+    .then((result) => {
+      console.log("User created:", result.user);
 
-  createUser(email, password)
-  .then(result => {
-    console.log(result.user);
-  })
-  .catch(error => {
-    console.log(error);
-  })
-}
+      updateUserProfile(name)
+        .then(() => {
+          console.log("User profile name updated!");
+        
+        })
+        .catch((error) => console.log(error));
+    })
+    .catch((error) => {
+      console.log("Error:", error);
+    });
+};
 
 
   return (

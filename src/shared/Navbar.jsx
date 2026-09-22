@@ -26,6 +26,7 @@ const Navbar = () => {
     { name: "Companies", path: "/companies" },
     { name: "Career Advice", path: "/career-advice" },
     { name: "Contact", path: "/contact" },
+    ...(user ? [{ name: "My Applications", path: "/myApplications" },] : []),
   ];
 
   return (

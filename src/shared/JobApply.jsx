@@ -17,9 +17,55 @@ import {
   HiOutlinePhone,
 } from "react-icons/hi";
 import { FaLinkedin, FaGithub, FaGlobe } from "react-icons/fa";
+import useAuth from "../hooks/useAuth";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const JobApply = () => {
-  const { id } = useParams();
+  const { id : jobId } = useParams();
+  const {user} = useAuth();
+
+
+  const handleApplyForSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const linkedIn = form.linkedin.value;
+    const github = form.github.value;
+    const portfolio = form.portfolio.value;
+    const expectedSalary = form.expectedSalary.value;
+    const noticePeriod = form.noticePeriod.value;
+
+    // console.log(linkedIn, github, portfolio, expectedSalary, noticePeriod);
+    const application = {
+        jobId,
+        applicant: user.email,
+        linkedIn,
+        github,
+        portfolio
+    }
+
+    console.log(application);
+
+    axios.post('http://localhost:3000/applications', application)
+    .then(res => {
+      console.log(res.data)
+      if(res.data.insertedId){
+        Swal.fire({
+  position: "top-end",
+  icon: "success",
+  title: "Your application submitted",
+  showConfirmButton: false,
+  timer: 1500
+});
+      }
+    })
+    .catch(error => {
+      console.log(error);
+    });
+    
+    
+
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-green-50 py-10">
@@ -32,7 +78,7 @@ const JobApply = () => {
           transition={{ duration: 0.4 }}
         >
           <Link
-            to={`/jobs/${id || ""}`}
+            to={`/jobs/${jobId || ""}`}
             className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-green-500 transition mb-8"
           >
             <HiOutlineArrowLeft className="w-4 h-4" />
@@ -65,7 +111,7 @@ const JobApply = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="lg:col-span-2"
           >
-            <form className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 space-y-8">
+            <form onSubmit={handleApplyForSubmit} className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 space-y-8">
 
               {/* Section 1: Applicant Profile Preview */}
               <div>
@@ -89,7 +135,7 @@ const JobApply = () => {
                       <input
                         type="text"
                         name="applicantName"
-                        defaultValue="Rahim Uddin"
+                        defaultValue={user?.displayName || " "}
                         readOnly
                         className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-700 font-medium focus:outline-none"
                       />
@@ -105,7 +151,7 @@ const JobApply = () => {
                       <input
                         type="email"
                         name="applicantEmail"
-                        defaultValue="rahim@example.com"
+                        defaultValue={user?.email || ""}
                         readOnly
                         className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-700 font-medium focus:outline-none"
                       />
@@ -243,7 +289,7 @@ const JobApply = () => {
                   <span className="w-7 h-7 bg-green-100 text-green-600 rounded-lg text-xs flex items-center justify-center font-semibold">
                     4
                   </span>
-                  Upload Resume / CV <span className="text-red-500">*</span>
+                  Upload Resume / CV 
                 </h2>
                 <p className="text-xs text-slate-400 mb-4 ml-9">
                   Upload your updated resume in PDF or DOCX format (Max 5MB).
@@ -264,7 +310,6 @@ const JobApply = () => {
                       type="file"
                       name="resume"
                       accept=".pdf,.doc,.docx"
-                      required
                       className="hidden"
                     />
                   </div>
